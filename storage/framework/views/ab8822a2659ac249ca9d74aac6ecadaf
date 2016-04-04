@@ -1,0 +1,29 @@
+<?php $__env->startSection('content'); ?>
+
+<a class="col-sm-offset-1 btn btn-primary" href="<?php echo e(url('/addon')); ?>">List Addon</a>
+<div style="margin: 20px 0;"></div>
+
+<?php echo Form::model($Addons, ['method' => 'PATCH', 'action' => ['AddonController@update', $Addons->id] ]); ?>
+
+
+    <?php echo $__env->make('errors.form_error', array_except(get_defined_vars(), array('__data', '__path')))->render(); ?>
+    <div class="form-group col-sm-12">
+
+        <?php echo Form::label('Name', 'Name:',['class'=>'col-sm-offset-1  col-sm-1']); ?>
+
+        <div class="col-sm-6">
+            <?php echo Form::text('name', null, ['required' => 'required','class'=> 'form-control']); ?>
+
+        </div>
+		<?php echo Form::submit("Save", array('class' => 'col-sm-offset-1 btn btn-primary submit_button')); ?>
+
+    </div>
+
+
+
+<?php echo Form::close(); ?>
+
+
+<?php $__env->stopSection(); ?>
+
+<?php echo $__env->make('template', array_except(get_defined_vars(), array('__data', '__path')))->render(); ?>

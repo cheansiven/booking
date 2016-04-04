@@ -1,0 +1,333 @@
+<?php $__env->startSection('content'); ?>
+    <?php echo Form::model($room, ['method' => 'PATCH', 'action' => ['RoomController@update', $room->id] ]); ?>
+
+
+    <?php echo $__env->make('errors.form_error', array_except(get_defined_vars(), array('__data', '__path')))->render(); ?>
+
+    <div class="C_Room_Header">
+        <img class="C_Room_img" src="<?php echo e(url('/public/Images/Junior_room.jpg')); ?>"/>
+        <h1> <?php echo e($room->name); ?></h1>
+    </div>
+
+    <div class="C_Room_Form">
+        <div class="form-group paddingtop">
+            <?php echo Form::label('max_num', 'Max.Number of rooms available:',['class'=>'col-sm-offset-1  col-sm-2']); ?>
+
+            <div class="col-sm-2">
+                <?php if(count($room)>0): ?>
+                    <?php echo Form::text('max_num', $room[0]["max_room"], ['required' => 'required','class'=> 'form-control']); ?>
+
+                <?php else: ?>
+                    <?php echo Form::text('max_num', null, ['required' => 'required','class'=> 'form-control']); ?>
+
+                <?php endif; ?>
+            </div>
+            <?php echo Form::label('standard_rate', 'standard (rack) rate in us dollars:',['class'=>'paddingleft col-sm-2']); ?>
+
+            <div class="col-sm-1">
+                <?php if(count($room)>0): ?>
+                    <?php echo Form::text('standard_rate', $room[0]["max_capacity"], ['required' => 'required','class'=> 'form-control']); ?>
+
+                <?php else: ?>
+                    <?php echo Form::text('standard_rate', null, ['required' => 'required','class'=> 'form-control']); ?>
+
+                <?php endif; ?>
+            </div>
+
+            <div class="col-sm-offset-1 col-sm-3">
+                <?php if($includes->count()): ?>
+                    <?php foreach($includes as $include): ?>
+                        <?php if(count($room_include)>0): ?>
+                            <?php if($room_include[0]["value"]== $include->value): ?>
+                                <?php echo Form::radio('include', $include->id, true, ['id'=> $include->value ,'class'=>'col-sm-1']); ?>
+
+                            <?php else: ?>
+                                <?php echo Form::radio('include', $include->id, false, ['id'=> $include->value ,'class'=>'col-sm-1']); ?>
+
+                            <?php endif; ?>
+                            <?php echo Form::label($include->value, $include->value ,['class'=>'col-sm-11']); ?>
+
+                        <?php else: ?>
+                            <?php echo Form::radio('include', $include->id, false, ['id'=> $include->value ,'class'=>'col-sm-1']); ?>
+
+                            <?php echo Form::label($include->value, $include->value ,['class'=>'col-sm-11']); ?>
+
+                        <?php endif; ?>
+
+                    <?php endforeach; ?>
+                <?php endif; ?>
+            </div>
+        </div>
+
+        <div class="form-group col-lg-12">
+            <?php echo Form::label('capacity', 'Max.Capacity:',['class'=>'col-sm-offset-1  col-sm-2']); ?>
+
+            <div class="col-sm-1" style="margin-top:-15px;">
+                <?php for($i=0;$i<4;$i++): ?>
+                    <?php if(count($room)>0): ?>
+                        <?php if($i < (int)$room[0]["max_capacity"]): ?>
+                            <?php echo Form::checkbox('capacity[]', "1", true, ['class' => 'check col-sm-1','id' => $i]); ?>
+
+                            <label for='<?php echo $i; ?>' class="checkbox col-sm-3">
+                                <i class="fa fa-male fa-2x"></i>
+                            </label>
+                        <?php else: ?>
+                            <?php echo Form::checkbox('capacity[]', "1", null, ['class' => 'check col-sm-1','id' => $i]); ?>
+
+                            <label for='<?php echo $i; ?>' class="checkbox col-sm-3">
+                                <i class="fa fa-male fa-2x"></i>
+                            </label>
+                        <?php endif; ?>
+                    <?php else: ?>
+                        <?php echo Form::checkbox('capacity[]', "1", null, ['class' => 'check col-sm-1','id' => $i]); ?>
+
+                        <label for='<?php echo $i; ?>' class="checkbox col-sm-3">
+                            <i class="fa fa-male fa-2x"></i>
+                        </label>
+                    <?php endif; ?>
+
+                <?php endfor; ?>
+            </div>
+        </div>
+
+        <div class="form-group col-sm-12">
+            <ul id="myTab" class="nav nav-tabs col-sm-12">
+                <li class="active">
+                    <a href="#prices" data-toggle="tab"> PRICES & RATES </a>
+                </li>
+                <li><a href="#rooms" data-toggle="tab">OPEN/CLOSE ROOMS</a></li>
+                <li><a href="#addons" data-toggle="tab">ADDONS</a></li>
+                <li><a href="#more" data-toggle="tab">....</a></li>
+            </ul>
+
+            <div id="myTabContent" class="tab-content">
+                <div class="tab-pane fade in active" id="prices">
+                    <div id="All_rate">
+                        <?php if(count($rates)): ?>
+                            <?php foreach($rates as $index => $rate): ?>
+                                <div id="room<?php echo e($index); ?>" class="col-sm-offset-1 col-sm-10">
+                                    <h3 class="col-sm-2"> Set price #<?php echo e($index + 1); ?></h3>
+
+                                    <div class="col-sm-3">
+                                        <label for="set_price" class="col-sm-6 paddingtop"> SET PRICE :</label>
+                                        <div class="col-sm-6 paddingtop">
+                                            <input class="form-control" name="set_price[]" type="text"
+                                                   value="<?php echo e($rate['price']); ?>">
+                                        </div>
+                                    </div>
+
+                                    <div class="col-sm-3 col-sm-offset-1 paddingtop">
+                                        <?php if(count($includes)): ?>
+                                            <?php foreach($includes as $include): ?>
+                                                <?php if($rate["include_id"] == $include->id): ?>
+                                                    <div class="radio">
+                                                        <label for="rate<?php echo e($i); ?><?php echo e($include->value); ?>"
+                                                               style="width:92%;">
+                                                            <input id="rate<?php echo e($i); ?><?php echo e($include->value); ?>"
+                                                                   class="col-sm-2" name="rate_inc<?php echo e($i + 1); ?>"
+                                                                   type="radio"
+                                                                   value="<?php echo e($include->id); ?>" checked/>
+                                                            <?php echo e($include->value); ?>
+
+                                                        </label>
+                                                    </div>
+                                                <?php else: ?>
+                                                    <div class="radio">
+                                                        <label for="rate<?php echo e($i); ?><?php echo e($include->value); ?>"
+                                                               style="width:92%;">
+                                                            <input id="rate<?php echo e($i); ?><?php echo e($include->value); ?>"
+                                                                   class="col-sm-2" name="rate_inc<?php echo e($i + 1); ?>"
+                                                                   type="radio"
+                                                                   value="<?php echo e($include->id); ?>"/>
+                                                            <?php echo e($include->value); ?>
+
+                                                        </label>
+                                                    </div>
+                                                <?php endif; ?>
+                                            <?php endforeach; ?>
+                                        <?php endif; ?>
+                                    </div>
+
+                                    <div style="float:right;" class="col-sm-3 paddingtop">
+                                        <input type="text" name="datefilter[]"
+                                               value="<?php echo e($rate['start_date']); ?> - <?php echo e($rate['close_date']); ?>"
+                                               class="form-control date-room"/>
+                                    </div>
+                                </div>
+                            <?php endforeach; ?>
+                        <?php endif; ?>
+                    </div>
+                    <button type="button" class="btn btn-primary more_day col-sm-offset-1" onClick="addrate()">
+                        add one more series
+                    </button>
+                </div>
+
+                <div class="tab-pane fade" id="rooms">
+                    <div id="All_Rooms">
+                        <?php if(count($rates)): ?>
+                            <?php foreach($rates as $rate): ?>
+                                <div id="room'+roomNum+'" class="col-sm-offset-1 col-sm-10">
+                                    <h3 class="col-sm-3"> Open / Close </h3>
+                                    <label for="num_ava_room" class="col-sm-2 paddingtop">
+                                        NUMBER OF ROOMS AVAILABLE:
+                                    </label>
+                                    <div class="col-sm-1 paddingtop">
+                                        <input class="form-control" name="num_ava_room[]" type="text"
+                                               value="<?php echo e($rate["room_avaiable"]); ?>">
+                                    </div>
+                                </div>
+                            <?php endforeach; ?>
+                        <?php endif; ?>
+                    </div>
+                    <button type="button" class="btn btn-primary more_day col-sm-offset-1" onClick="addroom()"
+                            style="margin-bottom: 200px;">add one more series
+                    </button>
+                </div>
+                <div class="tab-pane fade" id="addons">
+                    <h3 class="col-sm-offset-1 col-sm-11" style="float:left;">
+                        Add Ons
+                        <span class="paddingtop" style="font-size: 12px">
+                            if the service is not available, leave empty; If FREE, enter 0.
+                        </span>
+                    </h3>
+
+                    <?php if($addons->count()): ?>
+                        <?php foreach($addons as $addon): ?>
+                            <div class="col-sm-offset-1 col-sm-3">
+                                <label for="num_ava_room" class="col-sm-4 paddingtop"><?php echo e($addon->name); ?></label>
+                                <div class="col-sm-8 paddingtop">
+                                    <?php if(count($addon_room)>0): ?>
+                                        <?php for($i=0;$i<count($addon_room);$i++): ?>
+                                            <?php if( $addon->id-1 == $addon_room[$i]["addon_id"]): ?>
+                                                <?php echo Form::text('addon_name[]', $addon_room[$i]["rate"], ['class'=> 'form-control']); ?>
+
+                                                <?php break;?>
+                                            <?php elseif( $addon->id-1 != (int)$addon_room[$i]["addon_id"] && $i== count($addon_room)-1): ?>
+                                                <?php echo Form::text('addon_name[]', null , ['class'=> 'form-control']); ?>
+
+                                            <?php endif; ?>
+                                        <?php endfor; ?>
+                                    <?php else: ?>
+                                        <?php echo Form::text('addon_name[]', null , ['class'=> 'form-control']); ?>
+
+                                    <?php endif; ?>
+
+                                </div>
+                            </div>
+                        <?php endforeach; ?>
+                    <?php endif; ?>
+                </div>
+
+                <div class="tab-pane fade" id="more">
+                    <h3 class="col-sm-offset-1">Coming Soon</h3>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <?php echo Form::submit("Save", array('class' => 'col-sm-offset-1 btn btn-primary submit_btn')); ?>
+
+    <?php echo Form::close(); ?>
+
+<?php $__env->stopSection(); ?>
+
+<?php $__env->startSection('script'); ?>
+    <script type="text/javascript">
+        $(function () {
+            var today = new Date();
+            var tmr_dd = today.getDate() + 1;
+            var dd = today.getDate();
+            var mm = today.getMonth() + 1; //January is 0!
+            var yyyy = today.getFullYear();
+
+            if (dd < 10) {
+                dd = '0' + dd
+            }
+
+            if (mm < 10) {
+                mm = '0' + mm
+            }
+
+            today = mm + '/' + dd + '/' + yyyy;
+            tmr = mm + '/' + tmr_dd + '/' + yyyy;
+
+            $('.date-room').daterangepicker({
+                autoUpdateInput: false,
+                locale: {
+                    cancelLabel: 'Clear'
+                },
+                startDate: today,
+                minDate: today,
+                endDate: tmr
+            }, function (start, end, label) {
+                if(start.format('MM/DD/YYYY') < today) {
+                    return false;
+                }
+            });
+
+            $('.date-room').on('apply.daterangepicker', function (ev, picker) {
+                $(this).val(picker.startDate.format('MM/DD/YYYY') + ' - ' + picker.endDate.format('MM/DD/YYYY'));
+            });
+
+            $('.date-room').on('cancel.daterangepicker', function (ev, picker) {
+                $(this).val('');
+            });
+        });
+
+        var rateNum = "<?php echo e(count($rate)); ?>";
+        var roomNum = 0;
+        var addonNum = 0;
+
+        function addrate() {
+            rateNum++;
+            var display =
+                    '<div id="room' + rateNum + '" class="col-sm-offset-1 col-sm-10">' +
+                    '<h3 class="col-sm-2"> Set price #' + rateNum + ' </h3>' +
+                    '<div class="col-sm-3">' +
+                    '<label for="set_price" class="col-sm-6 paddingtop"> SET PRICE :</label>' +
+                    '<div class="col-sm-6 paddingtop">' +
+                    '<input class="form-control" name="set_price[]" type="text">' +
+                    '</div>' +
+                    '<div class="col-sm-12"><span>----- or -----</span></div>' +
+                    '<label for="set_price" class="col-sm-6 paddingtop">SET PERCENTAGE :</label>' +
+                    '<div class="col-sm-6 paddingtop">' +
+                    '<input class="form-control" name="set_percent[]" type="text">' +
+                    '</div>' +
+                    '</div>' +
+                    '<div class="col-sm-3 col-sm-offset-1 paddingtop">';
+
+            <?php if(count($includes)): ?>
+                    <?php foreach($includes as $include): ?>
+                    display += '<input id="rate' + rateNum + '" class="col-sm-2" name="rate_inc'
+                    + rateNum + '" type="radio" value="<?php echo e($include->id); ?>">'
+                    + '<label for="rate' + rateNum + '" style="width:92%;"><?php echo e($include->value); ?>}/label>';
+            <?php endforeach; ?>
+                    <?php endif; ?>
+
+                    display += '</div>' +
+                    '<div style="float:right;" class="col-sm-3 paddingtop">' +
+                    '<input type="text" name="datefilter[]" value="" class="form-control date-room"/>' +
+                    '</div>' +
+                    '</div>';
+
+            $("#All_rate").append(display);
+        }
+
+        function addroom() {
+            roomNum++;
+            var display =
+                    '<div id="room' + roomNum + '" class="col-sm-offset-1 col-sm-10">' +
+                    '<h3 class="col-sm-3"> Open / Close </h3>' +
+                    '<label for="num_ava_room" class="col-sm-2 paddingtop">NUMBER OF ROOMS AVAILABLE:</label>' +
+                    '<div class="col-sm-1 paddingtop">' +
+                    '<input class="form-control" name="num_ava_room[]" type="text">' +
+                    '</div>' +
+
+                    '</div>';
+            $("#All_Rooms").append(display);
+        }
+
+    </script>
+<?php $__env->stopSection(); ?>
+
+<?php echo $__env->make('template', array_except(get_defined_vars(), array('__data', '__path')))->render(); ?>

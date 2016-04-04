@@ -1,0 +1,76 @@
+<?php $__env->startSection('style'); ?>
+    <style>
+        td {
+            text-transform: uppercase;
+        }
+    </style>
+<?php $__env->stopSection(); ?>
+
+<?php $__env->startSection('content'); ?>
+
+    <h2>Rooms & Suites</h2>
+
+    <div class="center">
+        <select name="display_by" id="display_by">
+            <option value="today">as of today</option>
+            <option value="this-week">as of this week</option>
+            <option value="this-month">as of this month</option>
+        </select>
+    </div>
+
+    <table class="table table-striped">
+        <thead>
+        <tr>
+            <th>Name</th>
+            <th class="center">Current Rate</th>
+            <th class="center">Currently Open</th>
+            <th class="center">Booked Today</th>
+            <th class="center">&nbsp;</th>
+        </tr>
+        </thead>
+
+        <tbody>
+        </tbody>
+
+    </table>
+<?php $__env->stopSection(); ?>
+
+<?php $__env->startSection('script'); ?>
+    <script>
+        var base_url = "<?php echo e(url()); ?>";
+
+        function createRoomList() {
+            var display_by = $('#display_by').val();
+
+            $.ajax({
+                url: base_url + '/rooms/ajax/get-list-data/' + display_by,
+                success: function (response) {
+                    var data_length = Object.keys(response.rooms).length;
+
+                    var markup = '';
+                    for(var i = 0; i < data_length; i++) {
+                        markup += '<tr>';
+                        markup += '<td><a href="'+ base_url +'/rooms/' + response.rooms[i]['id'] + '/edit">' + response.rooms[i]['name'] + '</a>';
+                        markup += '<td class="center">' + response.rooms[i]['standard_rate'];
+                        markup += '<td class="center">' + response.rooms[i]['currently_open'];
+                        markup += '<td class="center">' + response.rooms[i]['booked_number'];
+                        markup += '<td class="center">' + response.rooms[i]['name'];
+                    }
+
+                    $('table tbody').html(markup);
+                }
+            })
+        }
+
+        $(document).ready(function () {
+            createRoomList();
+        });
+
+        $(function () {
+            $('#display_by').change(function () {
+                createRoomList();
+            });
+        });
+    </script>
+<?php $__env->stopSection(); ?>
+<?php echo $__env->make('template', array_except(get_defined_vars(), array('__data', '__path')))->render(); ?>

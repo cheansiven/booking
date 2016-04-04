@@ -1,0 +1,469 @@
+body {
+    font-family: 'Open Sans', sans-serif;
+    font-size: 12px;
+    font-weight: normal;
+}
+
+a {
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+a.link_tour {
+    color: #4a7190;
+}
+
+.invisible {
+    visibility: hidden;
+}
+
+.container {
+    padding: 0 0 20px 0;
+}
+
+.page_title {
+    margin-top: 0;
+}
+
+#room_form_container {
+    margin-top: 140px;
+    margin-bottom: 100px;
+    position: relative;
+}
+
+.nav-tabs > li.active > a, .nav-tabs > li.active > a:focus, .nav-tabs > li.active > a:hover {
+    background-color: #F0F0F0;
+}
+
+.nav-tabs > li > a {
+    margin-right: 0px;
+}
+
+.nav li {
+    border-right: 1px solid #010202;
+    border-left: 1px solid #1A6C8E;
+    border-top: 0;
+    border-bottom: 0;
+    padding: 6px;
+}
+
+.nav li:first-child {
+    border-right: 1px solid #010202;
+    border-left: 0px solid #1A6C8E;
+}
+
+.nav li:last-child {
+    border-right: 0px solid #010202;
+    border-left: 1px solid #1A6C8E;
+}
+
+.nav li:hover {
+    background-color: #cce2f9;
+}
+
+label {
+    text-transform: uppercase;
+}
+
+.logout {
+    padding: 0 !important;
+}
+
+.logout_img {
+    width: 85px;
+}
+
+.navbar {
+    background: url('../img/nav-menu-bg.jpg') repeat-x;
+}
+
+.navbar-nav > li > a {
+    color: #fff !important;
+}
+
+.navbar-nav > .active > a {
+    background-color: transparent !important;
+    color: #777;
+}
+
+.footer {
+    width: 100%;
+    height: 40px;
+    background-color: #000;
+    margin-top: 50px;
+    position: fixed;
+    bottom: 0;
+    color: #eee;
+    z-index: 100;
+}
+
+/*////////////////Room \\\\\\\\\\\\\\\\\\\\\\\\*/
+.C_Room_img {
+    max-width: 190px;
+    margin: 15px;
+    float: left;
+}
+
+.C_Room_Header {
+    background: #f0f0f0;
+    height: 157px;
+    border-bottom: 1px dashed #ccc;
+    position: absolute;
+    width: 100%;
+    left: 0;
+    top: -20px;
+    z-index: 9;
+}
+
+.C_Room_Header h1 {
+    padding: 32px;
+}
+
+.C_Room_Header h1:first-letter {
+    text-transform: capitalize;
+}
+
+.form-group label {
+    padding: 0;
+}
+
+.form-group div {
+    padding: 0;
+}
+
+#capacity_list label {
+    padding-right: 10px;
+    float: left;
+}
+
+label {
+    text-transform: uppercase;
+}
+
+.paddingleft {
+    padding-left: 20px !important;
+}
+
+input[type="text"], input[type="email"],
+input[type="password"],input[type="submit"],
+button, select {
+    border-radius: 0!important;
+}
+
+input[type="checkbox"] {
+    display: none;
+}
+
+input[type="radio"] {
+    width: 15px;
+    height: 15px;
+}
+
+.checkbox {
+    color: #D8D8D8;
+}
+
+input[type="checkbox"]:checked + .checkbox {
+    color: #000;
+}
+
+#tabs_container {
+    margin-top: 80px;
+}
+
+ul#myTab li {
+    width: 18%;
+    border: none;
+    margin: 5px 5px 5px 0;
+    /* Permalink - use to edit and share this gradient: http://colorzilla.com/gradient-editor/#fefefe+0,e0e0e0+100 */
+    background: rgb(254,254,254); /* Old browsers */
+    background: -moz-linear-gradient(top,  rgb(254,254,254) 0%, rgb(224,224,224) 100%); /* FF3.6-15 */
+    background: -webkit-linear-gradient(top,  rgb(254,254,254) 0%,rgb(224,224,224) 100%); /* Chrome10-25,Safari5.1-6 */
+    background: linear-gradient(to bottom,  rgb(254,254,254) 0%,rgb(224,224,224) 100%); /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
+    filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#fefefe', endColorstr='#e0e0e0',GradientType=0 ); /* IE6-9 */
+}
+
+ul#myTab li a {
+    text-align: center;
+    border: none;
+    color: #000;
+}
+
+ul#myTab li:hover {
+    background: #F0F0F0;
+}
+
+ul#myTab li.active {
+    /* Permalink - use to edit and share this gradient: http://colorzilla.com/gradient-editor/#e0e0e0+0,fefefe+100 */
+    background: rgb(224,224,224); /* Old browsers */
+    background: -moz-linear-gradient(top,  rgb(224,224,224) 0%, rgb(254,254,254) 100%); /* FF3.6-15 */
+    background: -webkit-linear-gradient(top,  rgb(224,224,224) 0%,rgb(254,254,254) 100%); /* Chrome10-25,Safari5.1-6 */
+    background: linear-gradient(to bottom,  rgb(224,224,224) 0%,rgb(254,254,254) 100%); /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
+    filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#e0e0e0', endColorstr='#fefefe',GradientType=0 ); /* IE6-9 */
+}
+
+ul#myTab li.active a {
+    background: transparent!important;
+}
+
+.paddingtop {
+    padding-top: 15px !important;
+}
+
+.daterangepicker td.in-range {
+    background-color: #ddd!important;
+}
+
+.daterangepicker td.end-date {
+    background-color: #c9302c!important;
+}
+
+.daterangepicker.dropdown-menu.show-calendar.opensright {
+    left: 50% !important;
+}
+
+.checkbox .fa {
+    cursor: pointer;
+}
+
+.submit_btn {
+    position: absolute;
+    right: 0;
+    float: right;
+    top: 185px;
+    z-index: 99;
+}
+
+.submit_btn .btn {
+    padding: 10px 26px;
+    text-transform: uppercase;
+}
+
+.table a, .table {
+    color: #333;
+}
+
+td a.email {
+    text-decoration: underline;
+    text-transform: lowercase;
+}
+
+td a.email, td a.email:hover, td a.email:active, td a.email:visited {
+    color: #4f9fcf;
+}
+
+.table.table-list-item td {
+    padding: 4px 8px;
+    vertical-align: middle;
+}
+
+.content {
+    margin-bottom: 150px;
+}
+
+.reservation_container {
+    border-bottom: 1px solid #ddd;
+    margin-bottom: 50px;
+    margin-top: 10px;
+    min-height:32px;
+}
+
+.reservation_container:last-child {
+    margin-bottom:150px
+}
+
+.btn_date_container {
+    margin-bottom: 20px;
+    margin-top: -8px;
+}
+
+.reservation_table {
+    margin-bottom: 0;
+}
+
+.reservation_table>tbody+tbody {
+    border-width: 1px;
+}
+
+tbody.show_booking_detail{
+    cursor: pointer;
+}
+
+tbody.show_booking_detail.active {
+    background-color: #ccc;
+}
+
+tbody.show_booking_detail.active td {
+    font-weight: 600;
+}
+
+tbody.booking_detail {
+    border-top: 2px solid #666;
+    background-color: #f4f4f4;
+}
+
+.reservation_table>tbody>tr>th:first-child {
+    min-width: 160px;
+}
+
+.today_arrival, .tomorrow_arrival {
+    padding-left: 10px;
+}
+
+.today_arrival {
+    color: #fe2e2e;
+    font-weight: bold;
+    font-size: 15px;
+}
+
+.tomorrow_arrival {
+    color: #e9bd00;
+    font-weight: bold;
+    font-size: 14px;
+}
+
+.tomorrow_arrival.no_booking {
+    color: #333;
+    text-transform: uppercase;
+    font-weight:normal;
+}
+
+td .country_flag {
+    width: 20px;
+}
+
+#room_list td, #room_list td a {
+    color: #666;
+}
+
+#room_list th {
+    border: 0;
+}
+
+.center, td.center {
+    text-align: center;
+}
+
+select#display_by {
+    background: #fff;
+    padding: 8px 12px;
+    font-size: 12px;
+    min-width: 180px;
+    text-indent: 40px;
+}
+
+.red, .text-color-red, .text-danger {
+    color: #fe2e2e!important;
+}
+
+.bold {
+    font-weight: 600;
+}
+
+.edit_label {
+    font-size: 12px;
+    text-transform: lowercase;
+    cursor: pointer;
+}
+
+#txt_new_room_name {
+    padding: 2px 12px;
+    font-size: 25px;
+}
+
+.modal.in .modal-dialog {
+    z-index: 1051;
+}
+
+.photo_container {
+    position: relative;
+    width: 245px;
+}
+
+.btn-camera {
+    position: absolute;
+    width: 40px;
+    height: 24px;
+    right: 50%;
+    bottom: -143px;
+    z-index: 1;
+    background: #fff;
+    text-align: center;
+    color: #808080;
+    font-size: 16px;
+    cursor: pointer;
+    padding-left: 1px;
+}
+
+#image_preview {
+    width: 346px;
+    height: 296px;
+    position: relative;
+    overflow: hidden;
+    margin: -296px auto;
+}
+
+#image_preview img {
+    max-width: 500px;
+    height: auto;
+    position: absolute;
+    top: -9999px;
+    bottom: -9999px;
+    left: -9999px;
+    right: -9999px;
+    margin: auto;
+}
+
+.upload_form {
+    width: 350px;
+    height: 300px;
+    margin: 0 auto;
+    border: 2px dotted #999;
+    background: #fff;
+    overflow: hidden;
+    cursor: pointer;
+    text-align: center;
+}
+
+.upload_form .fa.fa-photo {
+    width: 60px;
+    height: 60px;
+    position: absolute;
+    top: 50%;
+    margin-top: -30px;
+    margin-left: -30px;
+    font-size: 20px;
+}
+
+div.upload_form form {
+    height: 100%;
+    width: 100%;
+    cursor: pointer;
+}
+
+div.upload_form input {
+    display: block !important;
+    width: 100% !important;
+    height: 100% !important;
+    opacity: 0 !important;
+    overflow: hidden !important;
+    cursor: pointer;
+}
+
+#image_preview_remove {
+    position: absolute;
+    width: 346px;
+    height: 296px;
+    background: rgba(0,0,0,.3);
+    top: 0;
+    margin-top: 17px;
+    display: none;
+    z-index: 2;
+}
+
+#image_preview_remove p {
+    margin-top: 130px;
+    font-size: 30px;
+    color: #fff;
+    margin-bottom: 0;
+}

@@ -1,0 +1,733 @@
+html, body {
+    background-color: #e2e3e5;
+    font-family: 'Open Sans', sans-serif;
+    color: #888;
+}
+
+.room_list_container select, #final_form select {
+    outline: none;
+    display: inline-block;
+    -webkit-appearance: none;
+    cursor: pointer;
+    margin: 0;
+}
+
+.room_list_container select {
+    background: #ffffff url('../img/down-pointing-bg-black.jpg') no-repeat right -2px top!important;
+    background-size: 22px 22px!important;
+    padding-right: 27px!important;
+}
+
+#final_form select {
+    background: #ffffff url('../img/down-pointing-bg-black.jpg') no-repeat right 5px center!important;
+    background-size: 22px 21px!important;
+    padding-right: 22px!important;
+}
+
+input[type=text], input.form-control, select, select.form-control {
+    background: #fff;
+    border: 1px solid #999;
+    color: #333;
+}
+
+header {
+    background: #88001b;
+    padding-bottom: 10px;
+}
+
+#main_wrapper {
+
+}
+
+.action_title {
+    font-size: 36px;
+    font-weight: 300;
+    line-height: 30px;
+}
+
+label.error {
+    font-weight: 400;
+}
+
+label.error, #checkin_label, #checkout_label {
+    color: #88001b;
+}
+
+.Line {
+    height: 1px;
+    background: #fff;
+    position: relative;
+    top: 65px;
+}
+
+.Home_Logo {
+    display: block;
+    margin: 0 auto;
+}
+
+.Choose_Date {
+    background: #E5E5E5;
+    padding-bottom: 35px;
+}
+
+.Choose_Date span {
+    color: #9b9b9b;
+    font-size: 35px;
+}
+
+.Choose_Date p {
+    color: #88001b;
+    font-size: 14px;
+}
+
+.Choose_Date input {
+    height: 40px;
+}
+
+.btn_next, .btn_back {
+    width: 150px;
+    float: right;
+    border-radius: 0;
+    border: 1px solid #000;
+    font-weight: 700;
+    text-transform: uppercase;
+}
+
+.btn_back.pull-left {
+    float: left;
+}
+
+#btn_back_1 {
+    background: #ffffff url('../img/up-pointing.jpg') no-repeat right 10px center!important;
+    background-size: 20px 20px!important;
+}
+
+#btn_next_1, #btn_next_2 {
+    background: #ffffff url('../img/down-pointing.png') no-repeat right 10px center!important;
+    background-size: 20px 20px!important;
+}
+
+#btn_next_3, #btn_next_4 {
+    background-color: #ffd41d;
+    border-color: #ffd41d;
+    font-size: 16px;
+}
+
+
+.section.proceed_booking {
+    margin-top: 40px;
+}
+
+#btn_next_3, #btn_back_3 {
+    font-size: 20px;
+    padding: 8px 12px;
+    width: 120px;
+}
+
+#btn_back_3 {
+    background: #3b0c00;
+    border-color: #3b0c00;
+    color: #88001b;
+}
+
+.step_footer {
+    min-height: 200px;
+    background-color: #88001b;
+    padding-top: 20px;
+}
+
+.action_container {
+    background-color: #88001b;
+    padding: 30px 0;
+}
+
+.action_container:not(.active) * {
+    visibility: hidden;
+}
+
+.action_container h2 {
+    color: #9b9b9b;
+}
+
+.action_container .room_name {
+    color: #D70D0D;
+}
+
+.action_container.active h2, .action_container.active .room_name {
+    color: #888;
+}
+
+.action_container.active {
+    /* Permalink - use to edit and share this gradient: http://colorzilla.com/gradient-editor/#efefef+0,eaeaea+72,ffffff+94,ededed+100,ededed+100,e2e2e2+101 */
+    background: #efefef; /* Old browsers */
+    background: -moz-linear-gradient(left,  #efefef 0%, #eaeaea 72%, #ffffff 94%, #ededed 100%, #ededed 100%, #e2e2e2 101%); /* FF3.6-15 */
+    background: -webkit-linear-gradient(left,  #efefef 0%,#eaeaea 72%,#ffffff 94%,#ededed 100%,#ededed 100%,#e2e2e2 101%); /* Chrome10-25,Safari5.1-6 */
+    background: linear-gradient(to right,  #efefef 0%,#eaeaea 72%,#ffffff 94%,#ededed 100%,#ededed 100%,#e2e2e2 101%); /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
+    filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#efefef', endColorstr='#e2e2e2',GradientType=1 ); /* IE6-9 */
+    padding: 10px 0;
+    margin-left: -25px;
+    margin-right: -25px;
+}
+
+.action_container .hide_on_active {
+    display: block;
+}
+
+.action_container.active .hide_on_active {
+    display: none;
+}
+
+.action_container .show_on_active {
+    display: none;
+}
+
+.action_container.active .show_on_active {
+    display: block;
+}
+
+.action_container span {
+    /*padding-top: 20px;*/
+    /*color: #9b9b9b;*/
+    /*font-size: 35px;*/
+}
+
+.action_container .step_footer {
+    margin-bottom: -31px;
+}
+
+.room_list_container {
+    padding: 30px;
+    text-align: center;
+    position: relative;
+}
+
+.room_list_container .room_name {
+    text-transform: capitalize;
+    font-size: 25px;
+    padding-top: 10px;
+}
+
+.room_list_container label {
+    font-weight: normal;
+    color: #333;
+}
+
+.special_offer_image_title, .sold_out_image_title {
+    position: relative;
+}
+
+.special_offer_image_title p {
+    text-transform: uppercase;
+    background: #ffd41d;
+    padding: 10px 0;
+    top: 0;
+    left: 0;
+    right: 0;
+    position: absolute;
+    color: #fe2e2e;
+    font-weight: bold;
+    font-size: 20px;
+}
+
+.special_offer_label span {
+    font-size: 20px;
+    color: #fe2e2e;
+}
+
+.special_offer_label i {
+    color: #fff;
+    margin-top: 4px;
+}
+
+.special_offer_label span:first-child i {
+    float:left;
+    margin-left:4px;
+}
+
+.special_offer_label span:last-child i {
+    float:right;
+    margin-right:4px;
+}
+
+.sold_out_image_title p {
+    text-transform: uppercase;
+    background: rgba(0, 0, 0, .6);
+    padding: 10px 0;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: -10px;
+    position: absolute;
+}
+
+.sold_out_image_title span {
+    display: inline-block;
+    vertical-align: middle;
+    padding-top: 22%;
+}
+
+.booked_room_list {
+    border-bottom: 0;
+}
+
+.room_list_image {
+    width: 100%;
+    height: auto;
+}
+
+.book_room_list_template:last-child {
+    border-bottom: 0 !important;
+}
+
+.booked_dates p, .booked_dates span {
+    text-align: center;
+}
+
+#step_2 .section, #step_3 .section {
+    padding: 20px 0;
+    border-bottom: 1px solid #ddd;
+}
+
+#choose_dates {
+    padding-top: 60px;
+}
+
+#choose_dates.active {
+    padding-top: 30px;
+}
+#checkin_container input, #checkout_container input {
+    text-transform: uppercase;
+    text-align: right;
+    font-weight: 600;
+}
+
+#checkin_container span, #checkout_container span {
+    text-transform: uppercase;
+    color: #ffd41d;
+    font-size: 14px;
+    padding: 0;
+    text-align: center;
+}
+
+.Select_Suite p {
+    font-size: 18px;
+    text-align: center;
+}
+
+.B_Form input[text] {
+    margin-right: 2%;
+}
+
+.Hide {
+    display: none;
+}
+
+.Show {
+    display: block !important;
+}
+
+.Allow_To_Sel {
+    color: #88001b;
+    background: #E5E5E5;
+    padding-bottom: 50px;
+}
+
+.Show_Detail {
+    text-align: center;
+}
+
+.Room_Display {
+    border-top: 1px solid #88001b;
+}
+
+.table > tbody > tr > td {
+    padding: 0;
+    border-top: none;
+    width: 70%;
+}
+
+.Table_Include {
+    margin-top: 55px;
+    float: left;
+    width: 75%;
+}
+
+.Table_Include label {
+    font-weight: 300;
+    float: right;
+    line-height: 40px;
+
+}
+
+.Table_Include p {
+    line-height: 40px;
+}
+
+/*
+.total_price {
+	background: #88001b;
+	height: 150px;
+}*/
+
+#total_price_all_rooms {
+    margin-right: 15px;
+    background: transparent!important;
+    border-color: #ffd41d;
+    color: #fff;
+    font-size: 16px;
+}
+
+.total_price > div > div {
+    border: 1px solid #ffff00;
+    width: 150px;
+    height: 35px;
+    line-height: 35px;
+    text-align: center;
+    float: right;
+}
+
+.total_price button {
+    background: #ffff00 !important;
+    color: #000;
+    margin-top: 5px !important;
+}
+
+.Check_In_Out > div > p:first-child {
+    color: #88001b;
+}
+
+.addon_price_math_list {
+    margin-top: 18px;
+    font-size:12px;
+}
+
+.addon_list {
+    margin-top: 30px;
+}
+
+.input_checkbox, .input_radio, .input_select_room {
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    -ms-appearance: none;
+    -o-appearance: none;
+    appearance: none;
+    position: relative;
+    top: 5px;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    height: 20px;
+    width: 20px;
+    -webkit-transition: all 0.15s ease-out 0s;
+    -moz-transition: all 0.15s ease-out 0s;
+    transition: all 0.15s ease-out 0s;
+    background: #fff;
+    border: 1px solid #333;
+    color: #333;
+    cursor: pointer;
+    display: inline-block;
+    margin-right: 0.5rem!important;;
+    outline: 0 !important;
+    z-index: 1000;
+    float: left;
+}
+
+.input_select_room, .input_radio {
+    border-radius: 10px;
+}
+
+.input_checkbox:checked:before {
+    height: 20px;
+    width: 20px;
+    position: absolute;
+    content: '\2715';
+    display: inline-block;
+    font-size: 20px;
+    text-align: center;
+    margin-top: -4.9px;
+    margin-left: -0.5px;
+}
+
+.input_select_room:checked:before, .input_radio:checked:before {
+    height: 12px;
+    width: 12px;
+    position: absolute;
+    content: '';
+    display: inline-block;
+    text-align: center;
+    margin-top: 2.5px;
+    margin-left: 2.7px;
+    line-height: 10px;
+    background-color: #000;
+    border-radius: 10px;
+}
+
+#final_form label.radio {
+    padding-right: 30px;
+}
+
+#final_form .input_radio {
+    height: 18px;
+    width: 18px;
+    margin-top: -5px;
+}
+
+#final_form .input_radio:checked:before {
+    margin-top: 2.3px;
+}
+
+select.number_of_room {
+    background: #fff;
+    border: 1px solid #333;
+    padding: 0 5px;
+    color: #333;
+}
+
+label.checkbox .input_checkbox {
+    top: -2px;
+}
+
+label.addon_label {
+    font-weight: normal;
+    font-size:12px;
+    color: #333;
+}
+
+.room_order, .room_name, .addon_label {
+    text-transform: uppercase;
+}
+
+.room_name {
+    font-size: 18px;
+}
+
+p.total_nights, p.total_rooms, .checkin, .checkout {
+    color: #333;
+    text-transform: uppercase;
+    font-weight: 600;
+}
+
+.txt_calculation_formula span {
+    font-size: 12px;
+    color: #000;
+}
+
+.Show_Date {
+    text-align: center;
+}
+
+.Show_Date > div > p:first-child {
+    color: #88001b;
+}
+
+.Center {
+    text-align: center;
+}
+
+.math_list {
+    text-align: right;
+    color: #333;
+    font-weight: 600;
+    font-size:15px;
+}
+
+.room_final_total {
+    border-top: 1px solid #333;
+}
+
+.disable_input {
+    border: none;
+    background: #fff;
+}
+
+.update_price {
+    border: none !important;
+    width: 85% !important;
+    margin-top: -5px;
+    float: left !important;
+}
+
+input[readonly] {
+    background: #fff!important;
+}
+
+input.all_total_price {
+    width: 140px;
+    height: 30px;
+    text-align: center;
+}
+
+.Form_Display div.col-sm-2 p {
+    text-align: center;
+}
+
+.Form_Display div.col-sm-2 p:first-child {
+    color: #88001b;
+}
+
+.form-control {
+    border-radius: 0px;
+}
+
+.r_width {
+    width: 30px;
+}
+
+.Form_Date {
+    text-align: center;
+}
+
+.Form_Date p:first-child {
+    color: #88001b;
+}
+
+.Confirm_Show div:first-child {
+    font-size: 24px;
+    padding: 50px;
+}
+
+.Confirm_Show div {
+    font-size: 20px;
+    padding-bottom: 30px;
+}
+
+.padding-left {
+    padding-left: 40px;
+}
+
+.trans {
+    font-size: 16px !important;
+    padding-top: 20px;
+    padding: 0 !important;
+}
+
+.social {
+    background: #88001b;
+    padding-bottom: 0 !important;
+}
+
+.social i {
+    color: #fff;
+    padding: 5px 40px;
+}
+
+.address, .address div {
+    font-size: 14px !important;
+    text-transform: uppercase;
+}
+
+.btn_form {
+    position: relative;
+    top: 72px;
+}
+
+.text-line-through {
+    text-decoration: line-through;
+}
+
+.red, .text-color-red {
+    color: #fe2e2e;
+}
+
+.booked_dates .red, .red-darker {
+    color: #88001b;
+}
+
+.no-border-bottom {
+    border-bottom: 0 !important;
+}
+
+/* Confirm page style */
+#confirm_form_container {
+    text-align: center;
+    font-size: 16px;
+    background-color: #fff;
+    padding-top: 30px;
+    padding-bottom: 30px;
+}
+
+#confirm_form_container p {
+    line-height: 20px;
+}
+
+#confirm_form_container .section {
+    padding-bottom: 10px
+}
+
+#confirm_form_container table {
+    border: 0;
+    margin: 30px 30px 50px 30px;
+}
+
+#confirm_form_container table th {
+    color: #88001b;
+    font-size: 20px;
+    padding: 6px 0;
+    font-weight:600;
+}
+
+#confirm_form_container table td {
+    padding: 4px 0;
+}
+
+#confirm_form_container table td:first-child {
+    width: 150px;
+    text-align: left;
+}
+
+#greeting {
+    font-weight: 600;
+    text-transform: capitalize;
+    padding-bottom: 40px;
+}
+
+#final_form .container label>p {
+    margin-top: 10px;
+    margin-bottom: -10px;
+    text-transform: uppercase;
+    font-weight: 600;
+}
+
+#final_form .container label>p:first-child {
+    float:left;
+}
+
+.required_star {
+    font-size: 15px!important;
+    color: #fe2e2e!important;
+    width: 10px;
+    float: left;
+    padding-left: 5px;
+    padding-top: 3px;
+    font-family:'Segoe UI', Frutiger, 'Frutiger Linotype', 'Dejavu Sans', 'Helvetica Neue', Arial, sans-serif;
+}
+
+.edit_dates {
+    font-size: 12px;
+    line-height: 0;
+    text-align: center;
+}
+
+#btn_edit_dates {
+    padding: 0;
+    background: transparent;
+    border: 0;
+}
+
+#ui-datepicker-div {
+    z-index: 1001!important;
+}
+
+#btn_cancel_update_dates {
+    margin-left: 5px;
+    display: none;
+}
+
+.txt_calculation_formula .special_offer_label {
+    color: #fcc083;
+    font-weight: 600;
+}
+
+.book_room_list_template .booking_dates {
+    padding-left: 30px;
+}

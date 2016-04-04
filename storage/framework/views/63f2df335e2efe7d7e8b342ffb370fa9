@@ -1,0 +1,82 @@
+<?php $__env->startSection('content'); ?>
+    <div id="confirm_form_container" class="row">
+        <div id="greeting">
+            Dear
+            <span id="title"><?php echo e($status); ?> </span>
+            <span id="firstname"><?php echo e($firstname); ?> </span>
+            <span id="lastname"><?php echo e($lastname); ?> </span>
+        </div>
+
+        <div class="section">
+            <p>We have well received your booking for : </p>
+
+            <?php foreach($booking_rooms as $booking_room): ?>
+            <p class="red">
+                <?php echo e($booking_room['total_room']); ?> <?php echo e($booking_room['name']); ?>
+
+            </p>
+            <?php endforeach; ?>
+        </div>
+
+        <div class="section">
+            <p>starting on the </p>
+            <p style="color:#bf2020"><?php echo e($checkin); ?></p>
+        </div>
+
+
+        <?php if($totalnight > 0): ?>
+            <div class="section">
+                for <span style="color: #bf2020"> <?php echo e($totalnight); ?> </span> <?php echo e(($totalnight > 1) ? 'nights' : 'night'); ?>
+
+            </div>
+        <?php endif; ?>
+
+
+        <div style="border-top:2px solid #bf2020"></div>
+
+        <div class="desc">
+            <table>
+
+                <tr>
+                    <th>Total amount:</th>
+                    <th>$ <?php echo e(money_format('%i', $totalprice)); ?></th>
+                </tr>
+                <tr>
+                    <td>Trans.Reference</td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <td>Trans.No.:</td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <td>Receipt No.:</td>
+                    <td></td>
+                </tr>
+            </table>
+        </div>
+
+        <div class="social Center">
+            <a href="#">
+                <i class="fa fa-facebook fa-2x"></i>
+            </a>
+            <a href="#">
+                <i class="fa fa-foursquare fa-2x"></i>
+            </a>
+            <a href="#"><i class="fa fa-twitter fa-2x"></i></a>
+        </div>
+
+        <div class="address">
+            <p style="font-size: 16px !important; padding: 30px; font-weight: 600;">amanjaya suites hotel</p>
+            <div class="section">
+                <p>#1 street 154</p>
+                <p>[ corner with sisovath quay ]</p>
+                <p>phnom penh kingdom of cambodia </p>
+            </div>
+            <p>T +855 (0) 23 21 47 47 </p>
+            <p>F +855 (0) 23 21 95 45 </p>
+        </div>
+    </div>
+<?php $__env->stopSection(); ?>
+
+<?php echo $__env->make('frontend.layout', array_except(get_defined_vars(), array('__data', '__path')))->render(); ?>

@@ -1,0 +1,712 @@
+<?php $__env->startSection('style'); ?>
+
+<?php $__env->stopSection(); ?>
+
+<?php $__env->startSection('content'); ?>
+
+    <div class="container">
+        <div id="message" class="alert alert-danger" role="alert" style="display: none">&nbsp;</div>
+    </div>
+
+    <div id="step_1">
+        <div id="choose_dates" class="row action_container active">
+            <div class="col-sm-12">
+                <div class="col-sm-12">
+                    <p class="action_title" id="action_title_1">1 - Choose the dates</p>
+                </div>
+            </div>
+
+            <div class="col-sm-12">
+                <div class="col-sm-4" id="checkin_container">
+                    <p class="col-sm-12" id="checkin_label">Check in </p>
+                    <input type="text" id="checkin" name="checkin" class="form-control input-model" readonly>
+                    <span class="hide_on_active"></span>
+                </div>
+                <div class="col-sm-4" id="checkout_container">
+                    <p class="col-sm-12" id="checkout_label">Check out </p>
+                    <input type="text" id="checkout" name="checkout" class="form-control input-model" readonly>
+                    <span class="hide_on_active"></span>
+                </div>
+                <div class="col-sm-4">
+                    <p>&nbsp;</p>
+                    <button type="button" class="btn btn-default btn_next show_on_active pull-right" id="btn_next_1">
+                        Next
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <div id="select_suits" class="row action_container">
+            <div class="col-sm-12">
+                <div class="col-sm-8">
+                    <h2 class="action_title">2 - Select your suite</h2>
+                </div>
+                <div class="col-sm-4 show_on_active">
+                    <button type="button" class="btn btn-default btn_back" id="btn_back_1">
+                        Back
+                    </button>
+                </div>
+            </div>
+            <div class="col-sm-12">
+                <?php if(count($rooms)): ?>
+                    <?php foreach($rooms as $room): ?>
+                        <div class="col-sm-4">
+                            <div class="room_list_container">
+                                <?php if( $room['number_room_available'] - $room['number_booked_room'] < 1): ?>
+                                    <div class="sold_out_image_title">
+                                        <p><span>Sold Out</span></p>
+                                        <img class="room_list_image" src="public/Images/Junior_room.jpg"/>
+                                    </div>
+
+                                    <p class="room_name"><?php echo e($room['name']); ?></p>
+                                <?php else: ?>
+                                    <?php if($room['price']): ?>
+                                        <div class="special_offer_image_title show_on_active">
+                                            <p class="special_offer_label">Special Offer</p>
+                                        </div>
+
+                                        <img class="room_list_image" src="public/Images/Junior_room.jpg"/>
+                                        <p class="room_name"> <?php echo e($room['name']); ?></p>
+                                        <p class="text-line-through show_on_active">
+                                            $ <?php echo e(money_format('%i', $room['standard_rate'])); ?>
+
+                                        </p>
+                                        <p class="red show_on_active">
+                                            $ <?php echo e(money_format('%i', $room['price'])); ?>
+
+                                        </p>
+                                    <?php else: ?>
+                                        <img class="room_list_image" src="public/Images/Junior_room.jpg"/>
+                                        <p class="room_name"><?php echo e($room['name']); ?></p>
+                                        <p class="show_on_active">
+                                            $ <?php echo e(money_format('%i', $room['standard_rate'])); ?>
+
+                                        </p>
+                                        <p class="show_on_active">&nbsp;</p>
+                                    <?php endif; ?>
+
+                                    <div class="show_on_active">
+                                        <label for="">Please select number of room</label>
+                                        <div style="margin: 0 auto; width: 20px;">
+                                            <input class="input_select_room checkbox" name="txt_rooms_selected[]"
+                                                   type="checkbox" value="<?php echo e($room['id']); ?>">
+                                        </div>
+                                        <div class="col-sm-12" style="margin-top: 20px;">
+                                            <select name="number_of_room" class="number_of_room" style="display: none;">
+                                                <?php for($i=1; $i<$room['number_room_available']; $i++): ?>
+                                                    <option value="<?php echo e($i); ?>"><?php echo e($i); ?></option>
+                                                <?php endfor; ?>
+                                            </select>
+                                        </div>
+                                    </div>
+                                <?php endif; ?>
+
+                            </div>
+
+                        </div>
+                    <?php endforeach; ?>
+                <?php endif; ?>
+            </div>
+
+            <div class="col-sm-12">
+                <div class="col-sm-8">
+                    &nbsp;
+                </div>
+                <div class="col-sm-4">
+                    <button type="button" class="btn btn-default btn_next" id="btn_next_2" style="display: none;">
+                        Continue
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <div class="row step_footer">
+            &nbsp;
+        </div>
+
+    </div>
+
+    <div id="step_2" class="row action_container active" style="display: none;">
+        <div class="booked_dates section container">
+            <div class="col-sm-4">
+                <p class="red">Check in</p>
+                <p class="checkin"></p>
+            </div>
+            <div class="col-sm-4">
+                <p class="red">Check out</p>
+                <p class="checkout"></p>
+            </div>
+            <div class="col-sm-4">
+                <p class="red">Total Nights</p>
+                <p class="total_nights"></p>
+            </div>
+        </div>
+
+        <div class="booked_room_list container section">
+            <?php if(count($rooms)): ?>
+                <?php foreach($rooms as $order => $room): ?>
+                    <?php $room_temp_price = ($room['price']) ? $room['price'] : $room['standard_rate'] ?>
+                    <div class="col-sm-12 book_room_list_template section row"
+                         id="book_room_list_template_<?php echo e($room['id']); ?>_1"
+                         data-temp="true">
+                        <div class="col-sm-12">
+                            <div class="col-sm-1 room_order">
+                                <span><?php echo e($order + 1); ?></span>
+                            </div>
+
+                            <div class="col-sm-4">
+                                <p class="room_name"><?php echo e($room['name']); ?></p>
+                                <p class="txt_calculation_formula"><?php echo e($room_temp_price); ?></p>
+                            </div>
+
+                            <div class="col-sm-offset-1 col-sm-4">
+                                <ul class="nav addon_list" data-room-id="<?php echo e($room['id']); ?>">
+                                    <?php if(count($addons_room)): ?>
+                                        <?php foreach($addons_room as $addon): ?>
+                                            <?php if($addon['room_id'] == $room['id']): ?>
+                                                <li data-id="<?php echo e($addon['id']); ?>">
+                                                    <label class="checkbox text-right addon_label">
+                                                        <input class="input_checkbox checkbox check_addon"
+                                                               type="checkbox" value="<?php echo e($addon['id']); ?>">
+                                                        <?php echo e($addon['name']); ?>
+
+                                                        <?php if($addon['rate'] == 0): ?>
+                                                            (FREE)
+                                                        <?php else: ?>
+                                                            ($ <?php echo e(money_format('%i', $addon['rate'])); ?>)
+                                                        <?php endif; ?>
+
+                                                        <span class="hidden" data-id="<?php echo e($addon['id']); ?>">
+                                                            <?php echo e(money_format('%i', $addon['rate'])); ?>
+
+                                                        </span>
+                                                    </label>
+                                                </li>
+                                            <?php endif; ?>
+                                        <?php endforeach; ?>
+                                    <?php endif; ?>
+                                </ul>
+                            </div>
+
+                            <div class="col-sm-2 addon_price_calculated math_list">
+                                <p class="room_temp_total">
+                                    <?php echo e(money_format('%i', $room_temp_price)); ?>
+
+                                </p>
+
+                                <div class="addon_price_math_list"></div>
+                            </div>
+                        </div>
+
+                        <div class="col-sm-12">
+                            <div class="col-sm-10">&nbsp;</div>
+                            <div class="col-sm-2 math_list">
+                                <p class="room_final_total">
+                                    <?php echo e(money_format('%i', $room_temp_price)); ?>
+
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                <?php endforeach; ?>
+            <?php endif; ?>
+        </div>
+
+        <div class="step_footer">
+            <div class="container">
+                <div class="container">
+                    <input type="text" id="total_price_all_rooms" class="total_price_all_rooms form-control btn_next text-right" readonly/>
+                </div>
+                <div class="section col-sm-12 no-border-bottom">
+                    <button type="button" class="btn btn-default btn_next show_on_active" id="btn_next_3">
+                        Proceed
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="step_3" class="row action_container active" style="display: none;">
+        <div class="booked_dates section container">
+            <div class="col-sm-12">
+                <div class="col-sm-3">
+                    <p class="red">Check in</p>
+                    <p class="checkin"></p>
+                </div>
+                <div class="col-sm-3">
+                    <p class="red">Check out</p>
+                    <p class="checkout"></p>
+                </div>
+                <div class="col-sm-6">
+                    <div class="col-sm-4">
+                        <p class="red">Total Nights</p>
+                        <p class="total_nights"></p>
+                    </div>
+                    <div class="col-sm-4">
+                        <p class="red">Total Rooms</p>
+                        <p class="total_rooms"></p>
+                    </div>
+                    <div class="col-sm-4">
+                        <p>&nbsp;</p>
+                        <p class="total_price_all_rooms"></p>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+
+        <div id="final_form_container" class="section container">
+            <?php echo Form::open(array('url'=>'/booking', 'method'=>'POST', 'id' => 'final_form', 'class' => 'form-inline','role' => 'form')); ?>
+
+            <div class="container">
+                <div class="form-group col-sm-12">
+                    <input type="radio" class="r_width" id="mr" name="status" value="mr" checked>
+                    <label for="mr" class="r_width">Mr</label>
+                    <input type="radio" class="r_width" id="mrs" name="status" value="mrs">
+                    <label for="mrs" class="r_width">Mrs</label>
+                    <input type="radio" class="r_width" id="ms" name="status" value="ms">
+                    <label for="ms" class="r_width">Ms</label>
+                </div>
+            </div>
+            <div class="container">
+                <div class="form-group col-sm-6">
+                    <div class="input-group col-sm-12">
+                        <label>First name</label>
+                        <input type="text" class="form-control" name="firstname" id="firstname"/>
+                        <div class="col-sm-5 messages"></div>
+                    </div>
+                </div>
+                <div class="form-group col-sm-6">
+                    <div class="input-group col-sm-12">
+                        <label>Last name</label>
+                        <input type="text" class="form-control" name="lastname" id="lastname"/>
+                        <div class="col-sm-5 messages"></div>
+                    </div>
+                </div>
+            </div>
+            <div class="container">
+                <div class="form-group col-sm-6">
+                    <div class="input-group col-sm-12">
+                        <label>Email address</label>
+                        <input type="text" class="form-control" name="email" id="email"/>
+                        <div class="col-sm-5 messages"></div>
+                    </div>
+                </div>
+                <div class="form-group col-sm-6">
+                    <div class="input-group col-sm-12">
+                        <label>Repeat Email address</label>
+                        <input type="text" class="form-control" name="re_email" id="re_email"/>
+                        <div class="col-sm-5 messages"></div>
+                    </div>
+                </div>
+            </div>
+            <div class="container">
+                <div class="form-group col-sm-6">
+                    <div class="input-group col-sm-12">
+                        <label>Country of origin</label>
+                        <select name="country" class="form-control" required id="country">
+                            <option disabled selected>-- Select your Country</option>
+
+                            <?php
+                            $countries = array("Afghanistan", "Albania", "Algeria", "American Samoa", "Andorra", "Angola", "Anguilla", "Antarctica", "Antigua and Barbuda", "Argentina", "Armenia", "Aruba", "Australia", "Austria", "Azerbaijan", "Bahamas", "Bahrain", "Bangladesh", "Barbados", "Belarus", "Belgium", "Belize", "Benin", "Bermuda", "Bhutan", "Bolivia", "Bosnia and Herzegowina", "Botswana", "Bouvet Island", "Brazil", "British Indian Ocean Territory", "Brunei Darussalam", "Bulgaria", "Burkina Faso", "Burundi", "Cambodia", "Cameroon", "Canada", "Cape Verde", "Cayman Islands", "Central African Republic", "Chad", "Chile", "China", "Christmas Island", "Cocos (Keeling) Islands", "Colombia", "Comoros", "Congo", "Congo, the Democratic Republic of the", "Cook Islands", "Costa Rica", "Cote d'Ivoire", "Croatia (Hrvatska)", "Cuba", "Cyprus", "Czech Republic", "Denmark", "Djibouti", "Dominica", "Dominican Republic", "East Timor", "Ecuador", "Egypt", "El Salvador", "Equatorial Guinea", "Eritrea", "Estonia", "Ethiopia", "Falkland Islands (Malvinas)", "Faroe Islands", "Fiji", "Finland", "France", "France Metropolitan", "French Guiana", "French Polynesia", "French Southern Territories", "Gabon", "Gambia", "Georgia", "Germany", "Ghana", "Gibraltar", "Greece", "Greenland", "Grenada", "Guadeloupe", "Guam", "Guatemala", "Guinea", "Guinea-Bissau", "Guyana", "Haiti", "Heard and Mc Donald Islands", "Holy See (Vatican City State)", "Honduras", "Hong Kong", "Hungary", "Iceland", "India", "Indonesia", "Iran (Islamic Republic of)", "Iraq", "Ireland", "Israel", "Italy", "Jamaica", "Japan", "Jordan", "Kazakhstan", "Kenya", "Kiribati", "Korea, Democratic People's Republic of", "Korea, Republic of", "Kuwait", "Kyrgyzstan", "Lao, People's Democratic Republic", "Latvia", "Lebanon", "Lesotho", "Liberia", "Libyan Arab Jamahiriya", "Liechtenstein", "Lithuania", "Luxembourg", "Macau", "Macedonia, The Former Yugoslav Republic of", "Madagascar", "Malawi", "Malaysia", "Maldives", "Mali", "Malta", "Marshall Islands", "Martinique", "Mauritania", "Mauritius", "Mayotte", "Mexico", "Micronesia, Federated States of", "Moldova, Republic of", "Monaco", "Mongolia", "Montserrat", "Morocco", "Mozambique", "Myanmar", "Namibia", "Nauru", "Nepal", "Netherlands", "Netherlands Antilles", "New Caledonia", "New Zealand", "Nicaragua", "Niger", "Nigeria", "Niue", "Norfolk Island", "Northern Mariana Islands", "Norway", "Oman", "Pakistan", "Palau", "Panama", "Papua New Guinea", "Paraguay", "Peru", "Philippines", "Pitcairn", "Poland", "Portugal", "Puerto Rico", "Qatar", "Reunion", "Romania", "Russian Federation", "Rwanda", "Saint Kitts and Nevis", "Saint Lucia", "Saint Vincent and the Grenadines", "Samoa", "San Marino", "Sao Tome and Principe", "Saudi Arabia", "Senegal", "Seychelles", "Sierra Leone", "Singapore", "Slovakia (Slovak Republic)", "Slovenia", "Solomon Islands", "Somalia", "South Africa", "South Georgia and the South Sandwich Islands", "Spain", "Sri Lanka", "St. Helena", "St. Pierre and Miquelon", "Sudan", "Suriname", "Svalbard and Jan Mayen Islands", "Swaziland", "Sweden", "Switzerland", "Syrian Arab Republic", "Taiwan, Province of China", "Tajikistan", "Tanzania, United Republic of", "Thailand", "Togo", "Tokelau", "Tonga", "Trinidad and Tobago", "Tunisia", "Turkey", "Turkmenistan", "Turks and Caicos Islands", "Tuvalu", "Uganda", "Ukraine", "United Arab Emirates", "United Kingdom", "United States", "United States Minor Outlying Islands", "Uruguay", "Uzbekistan", "Vanuatu", "Venezuela", "Vietnam", "Virgin Islands (British)", "Virgin Islands (U.S.)", "Wallis and Futuna Islands", "Western Sahara", "Yemen", "Yugoslavia", "Zambia", "Zimbabwe");
+                            ?>
+
+                            <?php for($i = 0;$i < count($countries);$i++): ?>
+                                <option value='<?php echo e($countries[$i]); ?>'><?php echo e($countries[$i]); ?></option>
+                            <?php endfor; ?>
+                        </select>
+                        <div class="col-sm-5 messages"></div>
+                    </div>
+                </div>
+                <div class="col-sm-6">&nbsp;</div>
+            </div>
+
+            <div style="padding: 30px">&nbsp;</div>
+
+            <div class="step_footer">
+                <div class="container">
+                    <button type="button" class="btn btn-default btn_next show_on_active" id="btn_next_4">
+                        Proceed
+                    </button>
+                </div>
+            </div>
+            <?php echo Form::close(); ?>
+
+        </div>
+
+    </div>
+
+    <div id="data"></div>
+
+<?php $__env->stopSection(); ?>
+
+<?php $__env->startSection('script'); ?>
+    <script type='text/javascript'>
+
+        $(document).ready(function () {
+            $("#checkin").datepicker({
+                defaultDate: "+1w",
+                minDate: 0,
+                firstDay: 0,
+                dateFormat: 'dd-mm-yy',
+                changeMonth: true,
+                numberOfMonths: 1,
+                onClose: function (selectedDate) {
+                    var minDate = $(this).datepicker('getDate');
+                    var newMin = new Date(minDate.setDate(minDate.getDate() + 1));
+                    $("#checkout").datepicker("option", "minDate", newMin);
+
+                    $("#checkin").next('span').text($("#checkin").val());
+                }
+            });
+
+            $("#checkout").datepicker({
+                defaultDate: "+1w",
+                minDate: '+2d',
+                changeMonth: true,
+                firstDay: 0,
+                dateFormat: 'dd-mm-yy',
+                numberOfMonths: 1,
+                onClose: function (selectedDate) {
+                    var maxDate = $(this).datepicker('getDate');
+                    var newMax = new Date(maxDate.setDate(maxDate.getDate() - 1));
+                    $("#checkin").datepicker("option", "maxDate", newMax);
+
+                    $("#checkout").next('span').text($("#checkout").val());
+                }
+            });
+
+            setDefaultDatesValue();
+        });
+
+        function setDefaultDatesValue() {
+            $("#checkin").datepicker('setDate', '1');
+            $("#checkin").next('span').text($("#checkin").val());
+
+            $("#checkout").datepicker('setDate', '+1');
+            $("#checkout").next('span').text($("#checkout").val());
+        }
+
+        function scrollTo(element) {
+            $('html, body').animate({
+                scrollTop: element.offset().top
+            }, 500);
+        }
+
+        function errorMessage(msg) {
+            $('#message').text(msg).show();
+
+            setTimeout(function () {
+                $('#message').show();
+            }, 3000)
+
+            return false;
+        }
+
+        $(document).ready(function () {
+            $('#btn_next_1').click(function (e) {
+                e.preventDefault();
+
+                if ($("#checkin").val() == '' || $("#checkout").val() == '') {
+                    return errorMessage('Check in and Check out date must not be blank.');
+                }
+
+                var next_to_element = $('#select_suits');
+                var current_action_element = $('#choose_dates');
+
+                $("#checkout, #checkin, #checkin_label, #checkout_label, #action_title_1").hide();
+                next_to_element.addClass('active');
+                current_action_element.removeClass('active');
+
+                //scrollTo(next_to_element);
+
+            });
+
+            $('#btn_back_1').click(function (e) {
+                e.preventDefault();
+
+                var back_to_element = $('#choose_dates');
+                var current_action_element = $('#select_suits');
+
+                $("#checkout, #checkin, #checkin_label, #checkout_label, #action_title_1").show();
+                back_to_element.addClass('active');
+                current_action_element.removeClass('active');
+
+                scrollTo(back_to_element);
+
+            });
+        });
+
+        function resetLocalData() {
+            var rooms_selected = [];
+            $("input[name='txt_rooms_selected[]']").each(function () {
+                if ($(this).is(':checked')) {
+                    var arr = {
+                        'id': $(this).val(),
+                        'number_selected': $(this).parent().parent().find('select.number_of_room').val()
+                    };
+
+                    rooms_selected.push(arr);
+                }
+            });
+
+            var total_rooms = $('.book_room_list_template').length;
+            var total_nights = getDaysBetweenDates($('#checkin').val(), $('#checkout').val());
+            var total_price_all_rooms = $('.total_price_all_rooms').val();
+
+            var data = {
+                'checkin': $('#checkin').val(),
+                'checkout': $('#checkout').val(),
+                'total_nights': total_nights,
+                'total_rooms': total_rooms,
+                'total_price_all_rooms': total_price_all_rooms,
+                'rooms': rooms_selected
+            };
+
+            $('#data').data('local', data);
+        }
+
+        function getLocalData() {
+            return $('#data').data('local');
+        }
+
+        function createRoomList() {
+
+        }
+
+        function getDaysBetweenDates(d1, d2) {
+
+            var str1 = '';
+            if (d1.indexOf("/") >= 0) {
+                str1 = d1.split('/');
+            } else if (d1.indexOf("-") >= 0) {
+                str1 = d1.split('-');
+            } else {
+                console.log('error string provided.');
+                return false;
+            }
+
+            var str2 = '';
+            if (d2.indexOf("/") >= 0) {
+                str2 = d2.split('/');
+            } else if (d2.indexOf("-") >= 0) {
+                str2 = d2.split('-');
+            } else {
+                console.log('error string provided.');
+                return false;
+            }
+
+            var t1 = new Date(str1[2], str1[1] - 1, str1[0]);
+            var t2 = new Date(str2[2], str2[1] - 1, str2[0]);
+
+            var diffMS = t1 - t2;
+
+            var diffS = diffMS / 1000;
+
+            var diffM = diffS / 60;
+
+            var diffH = diffM / 60;
+
+            return (diffH / 24) * (-1);
+        }
+
+        $('#btn_next_2').click(function (e) {
+            e.preventDefault();
+
+            var step_1 = $('#step_1');
+            var step_2 = $('#step_2');
+
+            step_1.hide();
+            step_2.show();
+
+            resetLocalData();
+
+            var data = getLocalData();
+
+            $('.booked_dates .checkin').text(data.checkin);
+            $('.booked_dates .checkout').text(data.checkout);
+            $('.booked_dates .total_nights').text(getDaysBetweenDates(data.checkin, data.checkout));
+
+            var markup = '';
+
+            //duplicate room list by number of user selected
+            for (var i = 0; i < (data.rooms).length; i++) {
+                if (data.rooms[i].number_selected > 1) {
+                    for (var i2 = 0; i2 < (data.rooms[i].number_selected - 1); i2++) {
+                        var template_element = $('#book_room_list_template_' + data.rooms[i].id + '_' + (i2 + 1));
+
+
+                        var new_markup = '<div class="col-sm-12 book_room_list_template section row" id="book_room_list_template_' + data.rooms[i].id + '_' + (i2 + 2) + '">'
+                                + template_element.html()
+                                + '</div>';
+
+                        template_element.after(new_markup);
+
+
+                        $('#book_room_list_template_' + data.rooms[i].id + '_' + (i2 + 2)).attr('data-temp', 'false');
+                    }
+                }
+
+                $('#book_room_list_template_' + data.rooms[i].id + '_1').attr('data-temp', 'false');
+            }
+
+            $('.book_room_list_template[data-temp=true]').remove();
+
+            $.each($('.book_room_list_template'), function (k, v) {
+                var room = $(this);
+                room.data('order', (k));
+                room.find('.room_order').text('Room ' + (k + 1));
+
+                $.each(room.find('.addon_list li'), function () {
+                    var addon = $(this);
+                    var addon_id = addon.data('id');
+
+                    addon
+                            .closest('.book_room_list_template')
+                            .find('.addon_price_math_list')
+                            .append('<p id="addon_id_' + addon_id + '">&nbsp;</p>');
+                });
+            });
+
+            calcTotalAllRoom();
+            resetLocalData();
+
+            $('.total_rooms').text(getLocalData().total_rooms);
+
+        });
+
+        $(function () {
+            $('.input_select_room').change(function () {
+                if ($(this).is(':checked')) {
+                    $('#btn_next_2').show();
+                    $(this).closest('.show_on_active').find('select[name="number_of_room"]').show();
+                } else {
+                    $('#btn_next_2').hide();
+                    $(this).closest('.show_on_active').find('select[name="number_of_room"]').hide();
+                }
+            });
+        });
+
+        function currencyToNumber(currency) {
+            return Number(currency.replace(/[^0-9\.]+/g, ""));
+        }
+
+        function calcTotalAllRoom() {
+            var total_price_all_rooms = 0;
+            $.each($('.room_final_total'), function () {
+                total_price_all_rooms += parseFloat(currencyToNumber($(this).text()));
+            });
+
+            $('.total_price_all_rooms').val(total_price_all_rooms.toFixed(2));
+        }
+
+        $(function () {
+            $(document.body).on('change', '.check_addon', function () {
+                var stored_value_element = $(this).parent().find('span');
+                var value = stored_value_element.text();
+                var id = stored_value_element.data('id');
+
+                if ($(this).is(':checked')) {
+                    $(this).closest('.book_room_list_template').find('#addon_id_' + id).text(value);
+                } else {
+                    $(this).closest('.book_room_list_template').find('#addon_id_' + id).html("&nbsp;");
+                }
+
+                var room_temp_total = $(this).closest('.book_room_list_template').find('.room_temp_total').text();
+                var total_addons = 0;
+
+                $.each($(this).closest('.book_room_list_template').find('.addon_price_math_list p'), function () {
+                    total_addons += parseFloat(currencyToNumber($(this).text()));
+                });
+
+                var room_final_total = parseFloat(room_temp_total) + parseFloat(total_addons);
+
+                $(this).closest('.book_room_list_template').find('.room_final_total').text(room_final_total.toFixed(2));
+
+                calcTotalAllRoom();
+            });
+        });
+
+        $(function () {
+            $('#btn_next_3').click(function (e) {
+                e.preventDefault();
+
+                var step_2 = $('#step_2');
+                var step_3 = $('#step_3');
+
+                step_2.hide();
+                step_3.show();
+
+                $.each($('.book_room_list_template ul.addon_list'), function () {
+                    var room = $(this);
+                    var value = room.data('room-id') + '=>';
+
+                    $.each(room.find('li input:checked'), function () {
+                        var addon = $(this);
+
+                        value += addon.val() + ',';
+                    });
+
+                    $('#final_form').append('<input type="hidden" name="room_with_addons[]" value="' + value + '">');
+                });
+
+                resetLocalData();
+                var data = getLocalData();
+
+                $('#final_form').append('<input type="hidden" name="checkin" value="' + data.checkin + '">');
+                $('#final_form').append('<input type="hidden" name="checkout" value="' + data.checkout + '">');
+                $('#final_form').append('<input type="hidden" name="total_nights" value="' + data.total_nights + '">');
+                $('#final_form').append('<input type="hidden" name="total_rooms" value="' + data.total_rooms + '">');
+                $('#final_form').append('<input type="hidden" name="total_price_all_rooms" value="' + data.total_price_all_rooms + '">');
+            });
+        });
+
+        /**
+         * Validation form
+         */
+
+        $(function () {
+            var form = $('#final_form');
+            form.validate({
+                rules: {
+                    firstname: {
+                        required: true
+                    },
+                    lastname: {
+                        required: true
+                    },
+                    email: {
+                        required: true,
+                        email: true
+                    },
+                    re_email: {
+                        required: true,
+                        email: true,
+                        equalTo: '#email'
+                    },
+                    country: {
+                        required: true
+                    }
+                },
+                messages: {},
+                errorPlacement: function (error, element) {
+                    var placement = element.closest('.form-group').find('.messages');
+                    if (placement) {
+                        $(placement).append(error)
+                    } else {
+                        error.insertAfter(element);
+                    }
+                }
+            });
+
+            $('#btn_next_4').on('click', function () {
+                if (form.valid()) {
+                    form.submit();
+                }
+            });
+        });
+
+    </script>
+<?php $__env->stopSection(); ?>
+
+<?php echo $__env->make('frontend.layout', array_except(get_defined_vars(), array('__data', '__path')))->render(); ?>

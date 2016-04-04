@@ -1,0 +1,572 @@
+@extends('template')
+
+@section('style')
+    <style>
+        #message {
+            bottom: 20px;
+            position: fixed;
+            z-index: 99;
+            width: inherit;
+            font-size: 14px;
+        }
+
+        label {
+            font-weight: normal;
+        }
+
+        label[for="num_ava_room"] {
+            float:left;
+            text-align: right;
+            max-width: 115px;
+            padding-right: 5px;
+        }
+
+        label[for="rate_price"] {
+            text-align: right;
+        }
+
+        .btn.btn-danger {
+            background-color: #ff0b00;
+            border-color:  #ff0b00;
+            font-weight: bold;
+        }
+
+        .btn-remove {
+            color: #fe2e2e;
+            text-transform: uppercase;
+        }
+    </style>
+@stop
+
+@section('content')
+    <div class="C_Room_Header">
+        <img class="C_Room_img" src="{{ url($room[0]->photo) }}"/>
+        <h1>{{$room[0]->name}}</h1>
+    </div>
+
+    <div id="room_form_container" class="container">
+
+        <div id="message" class="alert " role="alert" style="display: none;">&nbsp;</div>
+
+        {!! Form::model($room, ['method' => 'PATCH', 'action' => ['RoomController@update', $room[0]->id] ]) !!}
+
+        @include('errors.form_error')
+
+        <div class="C_Room_Form row">
+            <div class="paddingtop row">
+                {!! Form::label('max_num', 'Max.Number of rooms available:',['class'=>'col-sm-2']) !!}
+                <div class="col-sm-2">
+                    @if(count($room)>0)
+                        {!! Form::text('max_room', $room[0]->max_room, ['required' => 'required','class'=> 'form-control']) !!}
+                    @else
+                        {!! Form::text('max_room', null, ['required' => 'required','class'=> 'form-control']) !!}
+                    @endif
+                </div>
+
+                <div class="col-sm-3">
+                    <div class="pull-right">
+                        <label class="pull-left text-right" style='max-width: 182px; padding-right: 5px'>
+                            standard (rack) rate <br> <span class="text-lowercase">in us dollars</span>
+                        </label>
+
+                        <div class="pull-left" style="max-width: 90px;">
+                            <input type="text" name="standard_rate"
+                                   value="{{ $room[0]->standard_rate }}" class="form-control" required>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-sm-3 col-sm-offset-1">
+                    @if ($includes->count())
+                        @foreach ($includes as $include)
+                            @if(count($room_include)>0)
+                                @if($room_include[0]["value"]== $include->value)
+                                    {!! Form::radio('include', $include->id, true, ['id'=> $include->value ,'class'=>'col-sm-1']) !!}
+                                @else
+                                    {!! Form::radio('include', $include->id, false, ['id'=> $include->value ,'class'=>'col-sm-1']) !!}
+                                @endif
+                                {!! Form::label($include->value, $include->value ,['class'=>'col-sm-11']) !!}
+                            @else
+                                {!! Form::radio('include', $include->id, false, ['id'=> $include->value ,'class'=>'col-sm-1']) !!}
+                                {!! Form::label($include->value, $include->value ,['class'=>'col-sm-11']) !!}
+                            @endif
+
+                        @endforeach
+                    @endif
+                </div>
+            </div>
+
+            <div class="row" id="capacity_list">
+
+                <label class="col-sm-2">Max. Capacity</label>
+
+                <div class="col-sm-10">
+                    @for($i=0;$i<4;$i++)
+                        @if(count($room)>0)
+                            @if($i < (int)$room[0]->max_capacity)
+                                {!! Form::checkbox('capacity[]', "1", true, ['class' => 'check','id' => $i]) !!}
+                                <label for='{{ $i }}' class="checkbox">
+                                    <i class="fa fa-male fa-2x"></i>
+                                </label>
+                            @else
+                                {!! Form::checkbox('capacity[]', "1", null, ['class' => 'check','id' => $i]) !!}
+                                <label for='<?php echo $i; ?>' class="checkbox">
+                                    <i class="fa fa-male fa-2x"></i>
+                                </label>
+                            @endif
+                        @else
+                            {!! Form::checkbox('capacity[]', "1", null, ['class' => 'check','id' => $i]) !!}
+                            <label for='<?php echo $i; ?>' class="checkbox">
+                                <i class="fa fa-male fa-2x"></i>
+                            </label>
+                        @endif
+
+                    @endfor
+                </div>
+            </div>
+
+            <div class="submit_btn row">
+                {!! Form::submit("Save All", array('class' => 'btn btn-danger')) !!}
+            </div>
+
+            <div class="row" id="tabs_container">
+                <ul id="myTab" class="nav nav-tabs col-sm-12">
+                    <li class="active">
+                        <a href="#prices" data-toggle="tab"> PRICES & RATES </a>
+                    </li>
+                    <li>
+                        <a href="#rooms" data-toggle="tab">OPEN/CLOSE ROOMS</a>
+                    </li>
+                    <li>
+                        <a href="#addons" data-toggle="tab">ADD ONS</a>
+                    </li>
+                    <li>
+                        <a href="#more" data-toggle="tab">....</a>
+                    </li>
+                </ul>
+
+                <div id="myTabContent" class="tab-content row">
+                    <div class="tab-pane fade in active" id="prices">
+                        <div id="rate_list">
+                            @if(count($rates))
+                                @foreach($rates as $index => $rate)
+                                    @if($rate['close_date'] >= date('Y-m-d'))
+
+                                    <div id="room_{{  $index }}" class="rate_list_item col-sm-12">
+                                        <h3 data-id="{{ $rate['id'] }}" class="rate_number col-sm-2"> Set price #{{ $index + 1 }}</h3>
+
+                                        <div class="col-sm-2">
+                                            <div class="pull-right">
+                                                <label for="rate_price" class="paddingtop" style="text-align: right; float:left; padding-right: 5px;">
+                                                    SET PRICE
+                                                    <br>
+                                                    <span class="text-lowercase">in us dollars</span>
+                                                </label>
+                                                <div class="paddingtop" style="max-width: 90px; float:left">
+                                                    <input class="form-control rate_price" type="text"  value="{{ $rate['price'] }}">
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <div class="col-sm-4 paddingtop" id="include_list">
+                                            @if(count($includes))
+                                                @foreach($includes as $include)
+                                                    @if($rate["include_id"] == $include->id)
+                                                        <div class="radio">
+                                                            <label for="rate_{{ $i }}_{{ $include->value }}"
+                                                                   style="width:92%;">
+                                                                <input id="rate_{{ $i }}_{{ $include->value }}"
+                                                                       class="col-sm-2 rate_include"  type="radio"
+                                                                       value="{{ $include->id }}" checked/>
+                                                                {{ $include->value }}
+                                                            </label>
+                                                        </div>
+                                                    @else
+                                                        <div class="radio">
+                                                            <label for="rate_{{ $i }}_{{ $include->value }}"
+                                                                   style="width:92%;">
+                                                                <input id="rate_{{ $i }}_{{ $include->value }}"
+                                                                       class="col-sm-2 rate_include" name="rate_include{{ $i + 1 }}"
+                                                                       type="radio"
+                                                                       value="{{ $include->id }}"/>
+                                                                {{ $include->value }}
+                                                            </label>
+                                                        </div>
+                                                    @endif
+                                                @endforeach
+                                            @endif
+                                        </div>
+
+                                        <div class="col-sm-3 center paddingtop">
+                                            <input type="text" name="rate_duration_dates[]"
+                                                   value="{{ $rate['start_date'] }} - {{ $rate['close_date'] }}"
+                                                   class="form-control rate_duration_dates" disabled>
+                                        </div>
+
+                                        <div class="col-sm-1 center paddingtop">
+                                            <a href="#" class="btn btn-remove remove_rate" data-rate-id="{{ $rate['id'] }}">Remove</a>
+                                        </div>
+
+                                    </div>
+                                    @endif
+                                @endforeach
+                            @endif
+                        </div>
+
+                        <div class="col-sm-12">&nbsp;</div>
+
+                        <div class="col-sm-12">
+                            <button type="button" class="btn btn-primary more_day" onClick="addrate()">
+                                add one more series
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="tab-pane fade" id="rooms">
+                        <div id="room_available_list" class="row">
+                            @if($room[0]->room_available->count())
+                                @foreach($room[0]->room_available as $room_available)
+
+                                    <div id="room'+roomNum+'" class="col-sm-12 room_available_list_container">
+                                        <h3 class="col-sm-3"> Open / Close </h3>
+                                        <div class="col-sm-2 paddingtop">
+                                            <div class="pull-right">
+                                            <label for="num_ava_room">
+                                                NUMBER OF <br> ROOMS AVAILABLE:
+                                            </label>
+
+                                            <input class="form-control" name="number_room_available[]" type="text"
+                                                   value="{{ $room_available->number_room_available }}"
+                                                   style="max-width: 65px;">
+                                            </div>
+                                        </div>
+                                        <div class="col-sm-4 col-sm-offset-2 center paddingtop">
+                                            <input type="text" name="room_available_duration_dates[]"
+                                                   value="{{$room_available->start_date }} - {{ $room_available->close_date }}"
+                                                   class="form-control room_available_duration_dates" disabled/>
+                                        </div>
+                                        <div class="col-sm-1 center paddingtop">
+                                            <a href="#" class="btn btn-remove remove_room_available" data-id="{{ $room_available->id }}">Remove</a>
+                                        </div>
+                                    </div>
+
+                                @endforeach
+                            @endif
+                        </div>
+
+                        <div class="col-sm-12">
+                            <button type="button" class="btn btn-primary more_day" onClick="addRoomAvailable()"
+                                    style="margin-bottom: 200px;">add one more series
+                            </button>
+                        </div>
+                    </div>
+                    <div class="tab-pane fade" id="addons">
+                        <h3 class="col-sm-offset-1 col-sm-11" style="float:left;">
+                            Add Ons
+                            <span class="paddingtop" style="font-size: 12px">
+                                if the service is not available, leave empty; If FREE, enter 0.
+                            </span>
+                        </h3>
+
+                        @if (count($addons))
+                            @foreach ($addons as $addon)
+
+                                <div class="col-sm-offset-1 col-sm-3">
+                                    <label for="num_ava_room" class="col-sm-4 paddingtop">{{ $addon['name']}}</label>
+                                    <div class="col-sm-8 paddingtop">
+                                        {!! Form::text('addon_raw_value[]', $addon['price'],
+                                            [
+                                                'class'=> 'form-control addon_value',
+                                                'data-id' => $addon['id'],
+                                                'data-addon-room-id' => $addon['addon_room_id']
+                                            ])
+                                        !!}
+                                        <input type="hidden" name="addon_value[]">
+                                    </div>
+                                </div>
+
+                            @endforeach
+                        @endif
+
+                    </div>
+
+                    <div class="tab-pane fade" id="more">
+                        <h3 class="col-sm-offset-1">Coming Soon</h3>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        {!! Form::close() !!}
+
+    </div>
+@stop
+
+@section('script')
+    <script src="{{ URL::asset('/public/js/jquery-dateFormat.min.js') }}"></script>
+    <script>
+        (function () {
+            $.fn.setDatePickers = function () {
+                var start_date = new Date();
+
+                var current_element = $(this);
+
+                var same_element_lengths = ($(current_element.selector).length);
+
+                $(this).focus(function () {
+                    var start_date = new Date();
+
+                    if((same_element_lengths - 2) > -1) {
+                        var last_same_element = $(current_element.selector).eq(($(current_element.selector).length) - 2);
+
+                        var dates = last_same_element.val();
+
+                        if (dates) {
+                            dates = dates.split(' - ');
+
+                            if (dates.length > 0) {
+                                var last_close_date = new Date(dates[1]);
+                                start_date.setDate(last_close_date.getDate() + 1);
+                            }
+                        }
+                    }
+
+                    start_date = $.format.date(start_date, "MM/dd/yyyy");
+
+                    var close_date = new Date(start_date);
+                    close_date.setDate(close_date.getDate() + 1);
+
+                    close_date = $.format.date(close_date, "MM/dd/yyyy");
+
+                    $(this).daterangepicker({
+                        autoUpdateInput: false,
+                        locale: {
+                            cancelLabel: 'Clear'
+                        },
+                        startDate: start_date,
+                        minDate: start_date,
+                        endDate: close_date
+                    }, function (start, end, label) {
+                        if (start.format('MM/DD/YYYY') < start_date) {
+                            return false;
+                        }
+                    });
+
+                    $(this).on('apply.daterangepicker', function (ev, picker) {
+                        console.log(picker);
+                        current_element.val(picker.startDate.format('MM/DD/YYYY') + ' - ' + picker.endDate.format('MM/DD/YYYY'));
+                    });
+
+                    $(this).on('cancel.daterangepicker', function () {
+                        current_element.val('');
+                    });
+                });
+            };
+        })(jQuery);
+    </script>
+
+    <script type="text/javascript">
+        function setMessage(text, type) {
+            if(typeof type == 'undefined') {
+                type = 'alert-danger';
+            }
+
+            //show
+            $('#message').text(text).removeClass(function (index, css) {
+                return (css.match(/(^|\s)alert-\S+/g) || []).join(' ');
+            }).addClass(type).slideDown(200);
+
+            setTimeout(function () {
+                //remove
+                $('#message').slideUp(500).text('');
+
+                setTimeout(function () {
+                    $('#message').removeClass(function (index, css) {
+                        return (css.match(/(^|\s)alert-\S+/g) || []).join(' ');
+                    });
+                }, 500);
+
+            }, 5000);
+        }
+
+        var rateNum = "{{ count($rates) }}";
+        var roomNum = 0;
+        var addonNum = 0;
+
+        function addrate() {
+            var empty_field = 0;
+            $('.rate_duration_dates').each(function () {
+               if($(this).val() == false) {
+                   empty_field++;
+               }
+            });
+
+            if(empty_field > 0) {
+                setMessage("You cannot add another rate while one is not completed correctly.");
+                return false;
+            }
+
+            rateNum++;
+            var display =
+                    '<div id="room' + rateNum + '" class="rate_list_item col-sm-12 section-container">'
+                    + '<h3 class="col-sm-2 rate_number" data-id="0">Set price #' + rateNum + ' </h3>'
+                    + '<div class="col-sm-2">'
+                    + '<div class="pull-right">'
+                    + '<label for="rate_price" class="paddingtop" style="text-align: right; float:left; padding-right: 5px;"> SET PRICE <br> <span class="text-lowercase">in us dollars</span></label>'
+                    + '<div class="paddingtop" style="max-width: 90px; float:left">'
+                    + '<input class="form-control rate_price" type="text">'
+                    + '</div>'
+                    + '</div>'
+                    + '</div>'; // close col-sm-2 set price container div
+
+            display += '<div class="col-sm-4 paddingtop">';
+
+            @if(count($includes))
+            @foreach($includes as $include)
+            display += '<div class="radio">'
+            + '<label for="rate_' + rateNum + '_{{ $include->value }}" style="width:92%;">'
+            + '<input id="rate_' + rateNum + '_{{ $include->value }}" class="col-sm-2 rate_include" type="radio" value="{{ $include->id }}"/>'
+            + '{{ $include->value }}'
+            + '</label>'
+            + '</div>';
+            @endforeach
+            @endif
+
+            display += '</div>'; //close include list div
+
+            display += '<div class="col-sm-3 center paddingtop">'
+                    + '<input type="text" name="rate_duration_dates[]" class="form-control rate_duration_dates duration_dates"/>'
+                    + '</div>' //close float right div date pickers
+                    + '<div class="col-sm-1 center paddingtop">'
+                    + '<a href="#" class="btn btn-remove remove_unsaved_rate">Remove</a>'
+                    + '</div>'
+                    + '</div>'; //close container
+
+            $("#rate_list").append(display);
+
+            $('.rate_duration_dates').setDatePickers();
+        }
+
+        $(document.body).on('click', '.remove_unsaved_rate', function (e) {
+            e.preventDefault();
+
+            $(this).closest('.rate_list_item').remove();
+        });
+
+        $(document.body).on('click', '.remove_rate', function (e) {
+            e.preventDefault();
+
+            var btn = $(this);
+
+            var rate_id = $(this).data('rate-id');
+
+            $.ajax({
+                url: "{{ url('rooms/ajax/remove-rate') }}",
+                type: 'POST',
+                data: {
+                    'id': rate_id,
+                    '_token': "{{ csrf_token() }}"
+                },
+                success: function () {
+                    btn.closest('.rate_list_item').remove();
+                },
+                error: function() {
+                    alert('Sorry!! Something went wrong.');
+                }
+            });
+        });
+
+        $(document.body).on('click', '.remove_unsaved_room_available', function (e) {
+            e.preventDefault();
+
+            $(this).closest('.room_available_list_container').remove();
+        });
+
+        $(document.body).on('click', '.remove_room_available', function (e) {
+            e.preventDefault();
+
+            var btn = $(this);
+
+            var room_available_id = $(this).data('id');
+
+            $.ajax({
+                url: "{{ url('rooms/ajax/remove-room-available') }}",
+                type: 'POST',
+                data: {
+                    'id': room_available_id,
+                    '_token': "{{ csrf_token() }}"
+                },
+                success: function () {
+                    btn.closest('.room_available_list_container').remove();
+                },
+                error: function() {
+                    alert('Sorry!! Something went wrong.');
+                }
+            });
+        });
+
+        function addRoomAvailable() {
+            roomNum++;
+
+            var display = '<div id="room_' + roomNum + '" class="col-sm-12 paddingtop room_available_list_container">'
+                    + '<h3 class="col-sm-3"> Open / Close </h3>'
+                    + '<div class="col-sm-2 paddingtop">'
+                    + '<label for="num_ava_room">'
+                    + 'NUMBER OF <br> ROOMS AVAILABLE</label>'
+                    + '<input class="form-control" name="number_room_available[]" type="text" style="max-width: 65px;">'
+                    + '</div>'
+                    + '<div class="col-sm-4 col-sm-offset-2">'
+                    + '<input type="text" name="room_available_duration_dates[]" class="form-control room_available_duration_dates"/>'
+                    + '</div>'
+                    + '<div class="col-sm-1 center">'
+                    + '<a href="#" class="btn btn-remove remove_unsaved_room_available">Remove</a>'
+                    + '</div>'
+                    + '</div>';
+
+            $("#room_available_list").append(display);
+
+            $('.room_available_duration_dates').setDatePickers();
+        }
+
+        $('form').submit(function () {
+
+            $('.submit_btn').attr('disabled', true);
+
+            var form = $(this);
+
+            $('.addon_value').each(function () {
+                if($(this).val()) {
+                    var addon_value = $(this).data('id') + '_' + $(this).data('addon-room-id') + '_' + $(this).val();
+                    $(this).parent().find('input[name="addon_value[]"]').val(addon_value);
+                } else {
+                    $(this).parent().find('input[name="addon_value[]"]').remove();
+                }
+            });
+
+            $('.rate_list_item').each(function () {
+                var values = '';
+
+                var rate_id = $(this).find('.rate_number').attr('data-id');
+                var rate_price = $(this).find('.rate_price').val();
+                var rate_include = $(this).find('.rate_include:checked').val();
+                var rate_duration_dates = $(this).find('.rate_duration_dates').val();
+
+                values = 'id=>' + rate_id + ','
+                        + 'price=>' + rate_price + ','
+                        + 'include=>' + rate_include + ','
+                        + 'duration_dates=>' + rate_duration_dates;
+
+                form.append('<input type="hidden" name="rate[]" value="' + values + '">');
+            });
+        });
+
+        $(function () {
+            $(document.body).on('click', '.btn btn-remove', function (e) {
+                e.preventDefault();
+
+                $(this).closest('.section-container').remove();
+            });
+        });
+
+    </script>
+@stop

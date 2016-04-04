@@ -1,0 +1,3 @@
+[2016-01-27 01:09:37] local.ERROR: exception 'Symfony\Component\Debug\Exception\FatalErrorException' with message 'Class 'App\Include_Model' not found' in /home/design/public_html/amanjaya/app/Http/Controllers/RoomController.php:57
+Stack trace:
+#0 {main}  
